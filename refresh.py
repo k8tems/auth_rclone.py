@@ -4,6 +4,7 @@ from google.oauth2.credentials import Credentials
 from oauthlib.oauth2 import BackendApplicationClient
 from requests.auth import HTTPBasicAuth
 from requests_oauthlib import OAuth2Session
+import configparser
 
 
 def load_yaml(f_name):
@@ -12,11 +13,14 @@ def load_yaml(f_name):
 
 
 if __name__ == '__main__':
+    configparser.ConfigParser()
+    config = RCloneConfig.open('rclone.conf')
+
     secrets = load_yaml('secrets.yaml')
-    client_id = secrets['client_id']
-    client_secret = secrets['client_secret']
-    refresh_token = secrets['refresh_token']
-    token_expiry = secrets['token_expiry']
+    client_id = config.client_id
+    client_secret = config.secret
+    refresh_token = config.refresh_token
+    token_expiry = config.token_expiry
 
     auth = HTTPBasicAuth(client_id, client_secret)
     client = BackendApplicationClient(client_id=client_id)
@@ -36,14 +40,4 @@ if __name__ == '__main__':
     if creds and creds.expired and creds.refresh_token:
         creds.refresh(Request())
 
-    config = f"""[mygdrive]
-type = drive
-client_id = {client_id}
-client_secret = {client_secret}
-scope = drive
-root_folder_id = 
-service_account_file = 
-token = {{"access_token":"{creds.token}","token_type":"Bearer","refresh_token":"{refresh_token}","expiry":"{token_expiry}"}}
-"""
-    with open('rclone.conf', 'w') as f:
-        f.write(config)
+    config.update_token(creds.token)
