@@ -28,15 +28,22 @@ class RCloneConfig:
         if name in ['client_id', 'client_secret']:
             return self.config['mygdrive'][name]
         elif name in ['refresh_token', 'expiry']:
-            return json.loads(self.config['mygdrive']['token'])[name]
+            return self.token_info[name]
         raise AttributeError()
 
-    def update_token(self, token):
-        token_info = json.loads(self.config['mygdrive']['token'])
-        token_info['access_token'] = token
-        self.config['mygdrive'] = json.dumps(token_info)
+    @property
+    def token_info(self):
+        return json.loads(self.config['mygdrive']['token'])
+
+    def update(self):
         with open(self.f_name, 'w') as f:
             self.config.write(f)
+
+    def update_token(self, token):
+        token_info = self.token_info
+        token_info['access_token'] = token
+        self.config['mygdrive']['token'] = json.dumps(token_info)
+        self.update()
 
 
 if __name__ == '__main__':
