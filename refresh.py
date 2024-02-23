@@ -1,4 +1,5 @@
 import yaml
+import json
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from oauthlib.oauth2 import BackendApplicationClient
@@ -12,15 +13,33 @@ def load_yaml(f_name):
         return yaml.safe_load(f.read())
 
 
+class RCloneConfig:
+    def __init__(self, config):
+        self.config = config
+
+    @classmethod
+    def open(cls, f_name):
+        parser = configparser.ConfigParser()
+        parser.read(f_name)
+        return RCloneConfig(parser)
+
+    def __getattr__(self, name):
+        if name in ['client_id', 'client_secret']:
+            return self.config['mygdrive'][name]
+        elif name in ['refresh_token', 'expiry']:
+            return json.loads(self.config['mygdrive']['token'])[name]
+        raise AttributeError()
+
+
 if __name__ == '__main__':
     configparser.ConfigParser()
     config = RCloneConfig.open('rclone.conf')
 
     secrets = load_yaml('secrets.yaml')
     client_id = config.client_id
-    client_secret = config.secret
+    client_secret = config.client_secret
     refresh_token = config.refresh_token
-    token_expiry = config.token_expiry
+    token_expiry = config.expiry
 
     auth = HTTPBasicAuth(client_id, client_secret)
     client = BackendApplicationClient(client_id=client_id)
