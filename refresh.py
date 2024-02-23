@@ -14,14 +14,15 @@ def load_yaml(f_name):
 
 
 class RCloneConfig:
-    def __init__(self, config):
+    def __init__(self, f_name, config):
+        self.f_name = f_name
         self.config = config
 
     @classmethod
     def open(cls, f_name):
         parser = configparser.ConfigParser()
         parser.read(f_name)
-        return RCloneConfig(parser)
+        return RCloneConfig(f_name, parser)
 
     def __getattr__(self, name):
         if name in ['client_id', 'client_secret']:
@@ -29,6 +30,13 @@ class RCloneConfig:
         elif name in ['refresh_token', 'expiry']:
             return json.loads(self.config['mygdrive']['token'])[name]
         raise AttributeError()
+
+    def update_token(self, token):
+        token_info = json.loads(self.config['mygdrive']['token'])
+        token_info['access_token'] = token
+        self.config['mygdrive'] = json.dumps(token_info)
+        with open(self.f_name, 'w') as f:
+            self.config.write(f)
 
 
 if __name__ == '__main__':
