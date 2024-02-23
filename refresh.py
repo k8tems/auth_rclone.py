@@ -45,7 +45,6 @@ if __name__ == '__main__':
     configparser.ConfigParser()
     config = RCloneConfig.open(sys.argv[1])
 
-    secrets = load_yaml('secrets.yaml')
     client_id = config.client_id
     client_secret = config.client_secret
     refresh_token = config.refresh_token
