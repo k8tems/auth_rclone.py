@@ -1,4 +1,5 @@
 import yaml
+import sys
 import json
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -48,7 +49,7 @@ class RCloneConfig:
 
 if __name__ == '__main__':
     configparser.ConfigParser()
-    config = RCloneConfig.open('rclone.conf')
+    config = RCloneConfig.open(sys.argv[1])
 
     secrets = load_yaml('secrets.yaml')
     client_id = config.client_id
