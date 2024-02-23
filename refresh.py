@@ -9,15 +9,14 @@ import configparser
 
 
 class RCloneConfig:
-    def __init__(self, f_name, config):
-        self.f_name = f_name
+    def __init__(self, config):
         self.config = config
 
     @classmethod
     def open(cls, f_name):
         parser = configparser.ConfigParser()
         parser.read(f_name)
-        return RCloneConfig(f_name, parser)
+        return RCloneConfig(parser)
 
     def __getattr__(self, name):
         if name in ['client_id', 'client_secret']:
@@ -30,15 +29,11 @@ class RCloneConfig:
     def token_info(self):
         return json.loads(self.config['mygdrive']['token'])
 
-    def update(self):
-        with open(self.f_name, 'w') as f:
-            self.config.write(f)
-
-    def update_token(self, token):
+    def update_token(self, f, token):
         token_info = self.token_info
         token_info['access_token'] = token
         self.config['mygdrive']['token'] = json.dumps(token_info)
-        self.update()
+        self.config.write(f)
 
 
 if __name__ == '__main__':
@@ -68,4 +63,5 @@ if __name__ == '__main__':
     if creds and creds.expired and creds.refresh_token:
         creds.refresh(Request())
 
-    config.update_token(creds.token)
+    with open(sys.argv[2], 'w') as f:
+        config.update_token(f, creds.token)
