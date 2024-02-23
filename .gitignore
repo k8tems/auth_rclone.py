@@ -1,0 +1,7 @@
+.idea/
+venv/
+*.yaml
+*.conf
+_refresh.py
+main.py
+main2.py
