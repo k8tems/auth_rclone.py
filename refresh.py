@@ -38,7 +38,9 @@ class RCloneConfig:
 
 if __name__ == '__main__':
     configparser.ConfigParser()
-    config = RCloneConfig.open(sys.argv[1])
+    in_f_name = sys.argv[1]
+    out_f_name = sys.argv[2]
+    config = RCloneConfig.open(in_f_name)
 
     client_id = config.client_id
     client_secret = config.client_secret
@@ -63,5 +65,5 @@ if __name__ == '__main__':
     if creds and creds.expired and creds.refresh_token:
         creds.refresh(Request())
 
-    with open(sys.argv[2], 'w') as f:
+    with open(out_f_name, 'w') as f:
         config.update_token(f, creds.token)
