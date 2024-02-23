@@ -1,4 +1,3 @@
-import yaml
 import sys
 import json
 from google.auth.transport.requests import Request
@@ -7,11 +6,6 @@ from oauthlib.oauth2 import BackendApplicationClient
 from requests.auth import HTTPBasicAuth
 from requests_oauthlib import OAuth2Session
 import configparser
-
-
-def load_yaml(f_name):
-    with open(f_name, 'r') as f:
-        return yaml.safe_load(f.read())
 
 
 class RCloneConfig:
