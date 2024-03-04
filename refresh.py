@@ -49,7 +49,6 @@ if __name__ == '__main__':
 
     auth = HTTPBasicAuth(client_id, client_secret)
     client = BackendApplicationClient(client_id=client_id)
-    oauth = OAuth2Session(client=client)
 
     oauth = OAuth2Session(client_id, redirect_uri='http://127.0.0.1:53682/',
                           scope=["https://www.googleapis.com/auth/drive"])
