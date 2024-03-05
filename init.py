@@ -21,6 +21,7 @@ def auth(client_id, client_secret):
         redirect_uri=redirect_uri
     )
 
+    # TODO: コードをコピーして貼り付ける形式にするにはどうすればいい？
     auth_url, _ = flow.authorization_url(prompt='consent')
 
     print("Please go to this URL and authorize access:")
