@@ -2,6 +2,8 @@ import os
 import sys
 from google_auth_oauthlib.flow import Flow
 from config import RCloneConfig
+from dataclasses import dataclass
+from datetime import datetime
 
 
 redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
@@ -27,10 +29,14 @@ def auth(client_id, client_secret):
     code = input('Code: ')
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
     flow.fetch_token(code=code)
-    print("Access Token:", flow.credentials.token)
-    print("Refresh Token:", flow.credentials.refresh_token)
+    return flow.credentials
 
 
 if __name__ == '__main__':
     config = RCloneConfig.open(sys.argv[1])
-    auth(config.client_id, config.client_secret)
+    creds = auth(config.client_id, config.client_secret)
+    with open(sys.argv[1], 'w') as w_f:
+        config.update_token(
+            w_f, access_token=creds.access_token,
+            refresh_token=creds.refresh_token,
+            expiry=creds.expiry.strftime('%Y-%m-%dT%H:%M:%S.%f') + 'Z')

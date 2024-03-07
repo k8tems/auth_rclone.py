@@ -23,8 +23,10 @@ class RCloneConfig:
     def token_info(self):
         return json.loads(self.config['mygdrive']['token'])
 
-    def update_token(self, f, token):
+    def update_token(self, f, **kwargs):
         token_info = self.token_info
-        token_info['access_token'] = token
+        for k, v in kwargs.items():
+            if v:
+                token_info[k] = v
         self.config['mygdrive']['token'] = json.dumps(token_info)
         self.config.write(f)

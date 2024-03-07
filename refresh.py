@@ -37,4 +37,4 @@ if __name__ == '__main__':
         creds.refresh(Request())
 
     with open(out_f_name, 'w') as f:
-        config.update_token(f, creds.token)
+        config.update_token(f, access_token=creds.token)
