@@ -1,7 +1,7 @@
 import os
 import sys
 from google_auth_oauthlib.flow import Flow
-import refresh
+from config import RCloneConfig
 
 
 redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
@@ -32,5 +32,5 @@ def auth(client_id, client_secret):
 
 
 if __name__ == '__main__':
-    config = refresh.RCloneConfig.open(sys.argv[1])
+    config = RCloneConfig.open(sys.argv[1])
     auth(config.client_id, config.client_secret)
