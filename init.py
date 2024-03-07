@@ -37,6 +37,6 @@ if __name__ == '__main__':
     creds = auth(config.client_id, config.client_secret)
     with open(sys.argv[1], 'w') as w_f:
         config.update_token(
-            w_f, access_token=creds.access_token,
+            w_f, access_token=creds.token,
             refresh_token=creds.refresh_token,
             expiry=creds.expiry.strftime('%Y-%m-%dT%H:%M:%S.%f') + 'Z')
