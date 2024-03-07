@@ -26,7 +26,7 @@ def auth(client_id, client_secret):
     print(auth_url)
     code = input('Code: ')
     os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
-    flow.fetch_token(code=code)  # Use the provided code to fetch the token
+    flow.fetch_token(code=code)
     print("Access Token:", flow.credentials.token)
     print("Refresh Token:", flow.credentials.refresh_token)
 
