@@ -5,7 +5,7 @@ I am not an expert in security and this script is probably vulnerable.
 Please use at your own risk.  
 
 ### Usage
-- Preparation
+- Preparation  
 Manually authenticate first using `rclone config`.    
 Then copy the config file to the /notebooks directory  
 ```python
@@ -13,7 +13,7 @@ cp ~/.config/rclone/rclone.conf /notebooks/rclone.conf
 ```
 
 - Refresh current token  
-Use this command whenever you create a new gradient instance
+Use this command whenever you create a new gradient instance  
 ```python
 python refresh.py /notebooks/rclone.conf ~/.config/rclone/rclone.conf
 ```
